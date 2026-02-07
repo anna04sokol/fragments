@@ -16,7 +16,21 @@ const {
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
-    // TODO
+    if (!ownerId || !type) {
+      throw new Error('Missing ownerId and type are required');
+    }
+    if (!Fragment.isSupportedType(type)) {
+      throw new Error('Type is not supported');
+    }
+    if (typeof size !== 'number' || size < 0) {
+      throw new Error('size must be a number and >= 0');
+    }
+    this.id = id || randomUUID();
+    this.ownerId = ownerId;
+    this.created = created || new Date().toISOString();
+    this.updated = updated || new Date().toISOString();
+    this.type = type;
+    this.size = size;
   }
 
   /**
@@ -26,7 +40,12 @@ class Fragment {
    * @returns Promise<Array<Fragment>>
    */
   static async byUser(ownerId, expand = false) {
-    // TODO
+    const fragments = await listFragments(ownerId, expand);
+    if (expand == true) {
+      return fragments.map((fragment) => new Fragment(JSON.parse(fragment)));
+    } else {
+      return fragments;
+    }
   }
 
   /**
@@ -36,8 +55,9 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
-    // TODO
     // TIP: make sure you properly re-create a full Fragment instance after getting from db.
+    let currentObject = await readFragment(ownerId, id);
+    return new Fragment(currentObject);
   }
 
   /**
@@ -46,8 +66,8 @@ class Fragment {
    * @param {string} id fragment's id
    * @returns Promise<void>
    */
-  static delete(ownerId, id) {
-    // TODO
+  static async delete(ownerId, id) {
+    return await deleteFragment(ownerId, id);
   }
 
   /**
@@ -55,7 +75,8 @@ class Fragment {
    * @returns Promise<void>
    */
   save() {
-    // TODO
+    this.updated = new Date().toISOString();
+    return writeFragment(this);
   }
 
   /**
@@ -63,7 +84,7 @@ class Fragment {
    * @returns Promise<Buffer>
    */
   getData() {
-    // TODO
+    return readFragmentData(this.ownerId, this.id);
   }
 
   /**
@@ -74,6 +95,10 @@ class Fragment {
   async setData(data) {
     // TODO
     // TIP: make sure you update the metadata whenever you change the data, so they match
+    await writeFragmentData(this.ownerId, this.id, data);
+    this.size = data.length;
+    this.updated = new Date().toISOString();
+    return this.save();
   }
 
   /**
@@ -91,7 +116,7 @@ class Fragment {
    * @returns {boolean} true if fragment's type is text/*
    */
   get isText() {
-    // TODO
+    return this.mimeType.startsWith('text/');
   }
 
   /**
@@ -99,7 +124,7 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    // TODO
+    return [this.mimeType];
   }
 
   /**
@@ -108,7 +133,12 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    // TODO
+    try {
+      const { type } = contentType.parse(value);
+      return type === 'text/plain';
+    } catch (err) {
+      return err;
+    }
   }
 }
 
