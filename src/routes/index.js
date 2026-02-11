@@ -26,7 +26,6 @@ router.get('/', (req, res) => {
   res.status(200).json(createSuccessResponse({
     description: 'fragments service running normally',
     author,
-    // TODO: change this to use your GitHub username!
     githubUrl: 'https://github.com/anna04sokol/fragments',
     version,
     timestamp: new Date().toISOString(),

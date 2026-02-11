@@ -48,4 +48,16 @@ describe('POST /v1/fragments', () => {
     expect(res.body.fragment.type).toBe('text/plain');
     expect(res.body.fragment.size).toBe(11);
   });
+
+  test('response has a location header', async () => {
+  const res = await request(app)
+    .post('/v1/fragments')
+    .auth('test-user1@fragments-testing.com', 'test-password1')
+    .set('Content-Type', 'text/plain')
+    .send('test123');
+  
+  expect(res.statusCode).toBe(201);
+  expect(res.headers.location).toBeDefined();
+  expect(res.headers.location).toMatch(/^http:\/\/.+\/v1\/fragments\/.+$/);
+  });
 });
