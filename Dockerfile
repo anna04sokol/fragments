@@ -1,5 +1,5 @@
 #Docker file for fragments 
-FROM node:20.17.0
+FROM node:24.2.0-alpine
 
 LABEL maintainer="Anna Sokol <anna04sokol@gmail.com>"
 LABEL description="Fragments node.js microservice"
@@ -14,6 +14,7 @@ ENV NPM_CONFIG_LOGLEVEL=warn
 # Disable colour when run inside Docker
 # https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
+ENV NODE_ENV=production
 
 # Use /app as our working directory
 WORKDIR /app
@@ -24,7 +25,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install node dependencies defined in package-lock.json
-RUN npm install
+RUN npm ci --omit=dev
 
 # Copy src to /app/src/
 COPY ./src ./src
