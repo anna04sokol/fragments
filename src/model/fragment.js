@@ -134,7 +134,7 @@ class Fragment {
   static isSupportedType(value) {
     try {
       const { type } = contentType.parse(value);
-      return type === 'text/plain';
+      return type === 'text/plain' || type === 'application/json';
     } catch (err) {
       return err;
     }
