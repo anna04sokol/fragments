@@ -1,40 +1,36 @@
-#Docker file for fragments 
-FROM node:24.2.0-alpine
+# Frontend build stage
+FROM node:24.2.0-alpine AS backend-build
 
 LABEL maintainer="Anna Sokol <anna04sokol@gmail.com>"
 LABEL description="Fragments node.js microservice"
 
-# We default to use port 8080 in our service
 ENV PORT=8080
 
 # Reduce npm spam when installing within Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#loglevel
 ENV NPM_CONFIG_LOGLEVEL=warn
 
 # Disable colour when run inside Docker
-# https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
 ENV NODE_ENV=production
 
-# Use /app as our working directory
 WORKDIR /app
-
-# Option 3: explicit filenames - Copy the package.json and package-lock.json
-# files into the working dir (/app), using full paths and multiple source
-# files.  All of the files will be copied into the working dir `./app`
 COPY package.json package-lock.json ./
-
-# Install node dependencies defined in package-lock.json
 RUN npm ci --omit=dev
-
-# Copy src to /app/src/
 COPY ./src ./src
-
-# Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
-
-# Start the container by running our server
 CMD ["npm", "start"]
+EXPOSE 8080
 
-# We run our service on port 8080
+# Frontend production stage
+FROM node:24.2.0-alpine AS production-build
+WORKDIR /app
+#copy node modules 
+COPY --from=backend-build /app/node_modules ./node_modules
+#copy json
+COPY --from=backend-build /app/package.json ./package.json
+#copy htpasswd
+COPY --from=backend-build /app/tests/.htpasswd ./tests/.htpasswd
+#copy source code
+COPY --from=backend-build /app/src ./src
+CMD ["npm", "start"]
 EXPOSE 8080
