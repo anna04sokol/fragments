@@ -135,8 +135,8 @@ class Fragment {
     try {
       const { type } = contentType.parse(value);
       return type === 'text/plain' || type === 'application/json';
-    } catch (err) {
-      return err;
+    } catch {
+      return false;
     }
   }
 }

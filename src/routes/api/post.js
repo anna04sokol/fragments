@@ -5,8 +5,10 @@ const logger = require('../../logger');
 module.exports = async (req, res) => {
   try {
     if (!Buffer.isBuffer(req.body)) {
-      logger.error('Unsupported type');
-      return res.status(415).json(createErrorResponse(415));
+      const contentType = req.get('Content-Type');
+      const message = `Unsupported Content-Type: ${contentType || 'not provided'}`;
+      logger.error(message);
+      return res.status(415).json(createErrorResponse(415, message));
     }
 
     const contentType = req.get('Content-Type');

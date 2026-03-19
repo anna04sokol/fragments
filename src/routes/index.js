@@ -33,4 +33,3 @@ router.get('/', (req, res) => {
 });
 
 module.exports = router;
-router.use(`/v1`, authenticate(), require('./api'));
