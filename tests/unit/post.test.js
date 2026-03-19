@@ -50,14 +50,28 @@ describe('POST /v1/fragments', () => {
   });
 
   test('response has a location header', async () => {
-  const res = await request(app)
-    .post('/v1/fragments')
-    .auth('test-user1@fragments-testing.com', 'test-password1')
-    .set('Content-Type', 'text/plain')
-    .send('test123');
-  
-  expect(res.statusCode).toBe(201);
-  expect(res.headers.location).toBeDefined();
-  expect(res.headers.location).toMatch(/^http:\/\/.+\/v1\/fragments\/.+$/);
+    const res = await request(app)
+      .post('/v1/fragments')
+      .auth('test-user1@fragments-testing.com', 'test-password1')
+      .set('Content-Type', 'text/plain')
+      .send('test123');
+
+    expect(res.statusCode).toBe(201);
+    expect(res.headers.location).toBeDefined();
+    expect(res.headers.location).toMatch(/^http:\/\/.+\/v1\/fragments\/.+$/);
+  });
+
+  test('fragment handles application/json and json body', async () => {
+    const jsonData = { name: 'anna' };
+    const res = await request(app)
+      .post('/v1/fragments')
+      .set('Content-Type', 'application/json')
+      .auth('test-user1@fragments-testing.com', 'test-password1')
+      .send(JSON.stringify(jsonData));
+    expect(res.statusCode).toBe(201);
+    expect(res.body.status).toBe('ok');
+    expect(res.body.fragment).toBeDefined();
+    expect(res.body.fragment.type).toBe('application/json');
+    expect(res.body.fragment.size).toBe(Buffer.byteLength(JSON.stringify(jsonData)));
   });
 });

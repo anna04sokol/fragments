@@ -23,9 +23,11 @@ app.use(pino);
 app.use(helmet());
 
 // Use CORS middleware so we can make requests across origins
-app.use(cors({
-  exposedHeaders: ['Location', 'location']
-}));
+app.use(
+  cors({
+    exposedHeaders: ['Location', 'location'],
+  })
+);
 
 // Use gzip/deflate compression middleware
 app.use(compression());
@@ -33,7 +35,6 @@ app.use(compression());
 // Set up our passport authentication middleware
 passport.use(authenticate.strategy());
 app.use(passport.initialize());
-
 
 // Define our routes
 app.use('/', require('./routes'));

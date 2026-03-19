@@ -23,13 +23,15 @@ router.get('/', (req, res) => {
   // Client's shouldn't cache this response (always request it fresh)
   res.setHeader('Cache-Control', 'no-cache');
   // Send a 200 'OK' response
-  res.status(200).json(createSuccessResponse({
-    description: 'fragments service running normally',
-    author,
-    githubUrl: 'https://github.com/anna04sokol/fragments',
-    version,
-    timestamp: new Date().toISOString(),
-  }));
+  res.status(200).json(
+    createSuccessResponse({
+      description: 'fragments service running normally',
+      author,
+      githubUrl: 'https://github.com/anna04sokol/fragments',
+      version,
+      timestamp: new Date().toISOString(),
+    })
+  );
 });
 
 module.exports = router;

@@ -43,15 +43,15 @@ class Fragment {
     const fragments = await listFragments(ownerId, expand);
     if (expand == true) {
       return fragments.map((fragment) => {
-      const f = new Fragment(JSON.parse(fragment));
-      return {
-        id: f.id,
-        ownerId: f.ownerId,
-        created: f.created,
-        updated: f.updated,
-        type: f.type,
-        size: f.size,
-      };
+        const f = new Fragment(JSON.parse(fragment));
+        return {
+          id: f.id,
+          ownerId: f.ownerId,
+          created: f.created,
+          updated: f.updated,
+          type: f.type,
+          size: f.size,
+        };
       });
     } else {
       return fragments;
@@ -144,7 +144,7 @@ class Fragment {
   static isSupportedType(value) {
     try {
       const { type } = contentType.parse(value);
-      return type === 'text/plain' || type === 'application/json';
+      return type === 'text/plain' || type === 'application/json' || type === 'text/markdown';
     } catch {
       return false;
     }

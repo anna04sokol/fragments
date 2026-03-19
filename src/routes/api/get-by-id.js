@@ -10,8 +10,9 @@ module.exports = async (req, res) => {
     let extension = null;
     logger.debug({ id }, 'Getting fragment by id');
 
-    if(id.includes('.')){ // ex: anna.html
-      const parts = id.includes('.');
+    if (id.includes('.')) {
+      // ex: anna.html
+      const parts = id.split('.');
       id = parts[0];
       extension = parts[1];
     }
@@ -21,16 +22,15 @@ module.exports = async (req, res) => {
     // Getting from metadata
     const data = await fragment.getData();
 
-    if(extension === 'html' && fragment.type === 'text-markdown'){
+    if (extension === 'html' && fragment.type === 'text/markdown') {
       const html = md.render(data.toString());
       res.setHeader('Content-Type', 'text/html');
-    res.status(200).send(html);
+      res.status(200).send(html);
 
-    // no extension
+      // no extension
     } else {
       res.setHeader('Content-Type', fragment.type);
       res.status(200).send(data);
-
     }
   } catch (err) {
     logger.error({ err }, 'Error occurred getting fragment by id');
