@@ -1,4 +1,4 @@
-# Frontend build stage
+# Backend build stage
 FROM node:24.2.0-alpine AS backend-build
 
 LABEL maintainer="Anna Sokol <anna04sokol@gmail.com>"
@@ -21,8 +21,8 @@ COPY ./tests/.htpasswd ./tests/.htpasswd
 CMD ["npm", "start"]
 EXPOSE 8080
 
-# Frontend production stage
-FROM node:24.2.0-alpine AS production-build
+# Backend production stage
+FROM node:24.2.0-alpine AS backend-production
 WORKDIR /app
 #copy node modules 
 COPY --from=backend-build /app/node_modules ./node_modules
