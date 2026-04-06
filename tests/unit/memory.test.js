@@ -15,7 +15,7 @@ describe('In-memory database operations', () => {
       id: 'id123',
     };
     await writeFragment(fragmentObject);
-    const res = await readFragment('ownerId123', 'id123');
+    const res = await readFragment('ownerId123', 'id123'); 
     expect(res).toEqual(fragmentObject);
   });
 
