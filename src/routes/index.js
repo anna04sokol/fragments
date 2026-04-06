@@ -1,6 +1,7 @@
 // src/routes/index.js
 
 const express = require('express');
+const { hostname } = require('os');
 // Our authentication middleware
 const { authenticate } = require('../auth');
 const { createSuccessResponse } = require('../response');
@@ -30,6 +31,7 @@ router.get('/', (req, res) => {
       githubUrl: 'https://github.com/anna04sokol/fragments',
       version,
       timestamp: new Date().toISOString(),
+      hostname: hostname(),
     })
   );
 });
