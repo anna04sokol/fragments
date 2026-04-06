@@ -1,11 +1,12 @@
 const MemoryDB = require('./memory-db');
 
 // Create two in-memory databases: one for fragment metadata and the other for raw data
-// The `data` MemoryDB simulates Amazon S3 for blob storage, the `metadata` simulates
-// Amazon DynamoDB for key/value storage.
+// The `data` MemoryDB simulates Amazon S3 for blob storage, the `metadata` simulates DynamoDB for key/value storage.
 const data = new MemoryDB();
 const metadata = new MemoryDB();
 
+// Create two in-memory databases: one for fragment metadata and the other for raw data
+// The `data` MemoryDB simulates Amazon S3 for blob storage, the `metadata` simulates
 // Write a fragment's metadata to memory db. Returns a Promise<void>
 function writeFragment(fragment) {
   // Simulate db/network serialization of the value, storing only JSON representation.

@@ -36,6 +36,10 @@
                 {
                     "name": "AWS_COGNITO_CLIENT_ID",
                     "value": "19ch3n27akgku6favt49d5g8r8"
+                },
+                {
+                    "name": "AWS_S3_BUCKET_NAME",
+                    "value": "asokol3-fragments"
                 }
             ],
             "environmentFiles": [],
