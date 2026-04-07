@@ -88,6 +88,8 @@ jobs:
             NODE_ENV=production
             AWS_REGION=us-east-2
             PORT=80
+            AWS_S3_BUCKET_NAME=asokol3-fragments
+            AWS_DYNAMODB_TABLE_NAME=fragments
             AWS_COGNITO_POOL_ID=${{ secrets.AWS_COGNITO_POOL_ID }}
             AWS_COGNITO_CLIENT_ID=${{ secrets.AWS_COGNITO_CLIENT_ID }}
             HTPASSWD_FILE=${{ secrets.HTPASSWD_FILE }}
