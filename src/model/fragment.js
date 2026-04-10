@@ -133,7 +133,19 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    return [this.mimeType];
+    const conversions = {
+      'text/plain': ['text/plain'],
+      'text/markdown': ['text/markdown', 'text/html', 'text/plain'],
+      'text/html': ['text/html', 'text/plain'],
+      'application/json': ['application/json', 'text/plain'],
+      'image/png': ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'],
+      'image/jpeg': ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'],
+      'image/webp': ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'],
+      'image/avif': ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'],
+      'image/gif': ['image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/avif'],
+    };
+
+    return conversions[this.mimeType] || [this.mimeType];
   }
 
   /**
@@ -144,7 +156,18 @@ class Fragment {
   static isSupportedType(value) {
     try {
       const { type } = contentType.parse(value);
-      return type === 'text/plain' || type === 'application/json' || type === 'text/markdown';
+      const supportedTypes = new Set([
+        'text/plain',
+        'text/markdown',
+        'text/html',
+        'application/json',
+        'image/png',
+        'image/jpeg',
+        'image/webp',
+        'image/avif',
+        'image/gif',
+      ]);
+      return supportedTypes.has(type);
     } catch {
       return false;
     }

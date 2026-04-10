@@ -5,7 +5,7 @@ describe('POST /v1/fragments', () => {
   test('Unsupported content-type return 415', async () => {
     const res = await request(app)
       .post('/v1/fragments')
-      .set('Content-Type', 'image/png')
+      .set('Content-Type', 'application/unsupported')
       .auth('test-user1@fragments-testing.com', 'test-password1')
       .send(JSON.stringify({ data: '123heyhey' }));
     expect(res.statusCode).toBe(415);
