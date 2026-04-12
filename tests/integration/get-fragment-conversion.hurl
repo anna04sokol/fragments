@@ -6,15 +6,10 @@ Content-Type: text/markdown
 user1@email.com:password1
 `# Hello World`
 
-HTTP/1.1 201
-[Captures]
-url: header "Location"
-
+HTTP/1.1 200
+[Asserts]
+header "Content-Type" matches /^text\/html$/
+body contains "<h1>Hello World</h1>"
 GET {{url}}.html
 [BasicAuth]
 user1@email.com:password1
-
-HTTP/1.1 200
-[Asserts]
-header "Content-Type" matches /^text\/html/?$
-body contains "<h1>Hello World</h1>"
