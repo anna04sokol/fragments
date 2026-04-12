@@ -8,8 +8,16 @@ user1@email.com:password1
 
 HTTP/1.1 201
 [Asserts]
-header "Content-Type" matches /^text\/html$/
-body contains "<h1>Hello World</h1>"
-GET {{url}}.html
+header "Content-Type" matches /^application\/json/
+body contains "\"status\":\"ok\""
+[Captures]
+location: header "Location"
+
+GET {{location}}.html
 [BasicAuth]
 user1@email.com:password1
+
+HTTP/1.1 200
+[Asserts]
+header "Content-Type" matches /^text\/html/
+body contains "<h1>Hello World</h1>"
