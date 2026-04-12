@@ -41,9 +41,10 @@ class Fragment {
    */
   static async byUser(ownerId, expand = false) {
     const fragments = await listFragments(ownerId, expand);
-    if (expand == true) {
+    if (expand === true) {
       return fragments.map((fragment) => {
-        const f = new Fragment(JSON.parse(fragment));
+        const parsed = typeof fragment === 'string' ? JSON.parse(fragment) : fragment;
+        const f = new Fragment(parsed);
         return {
           id: f.id,
           ownerId: f.ownerId,
@@ -53,9 +54,9 @@ class Fragment {
           size: f.size,
         };
       });
-    } else {
-      return fragments;
     }
+
+    return fragments;
   }
 
   /**
